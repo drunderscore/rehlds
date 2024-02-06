@@ -81,6 +81,7 @@ Proxy::LocalCommandID_s Proxy::m_LocalCmdReg[] = {
 	{ "protocol",          CMD_ID_PROTOCOL,           &Proxy::CMD_Protocol },
 	{ "region",            CMD_ID_REGION,             &Proxy::CMD_Region },
 	{ "chatdelay",         CMD_ID_CHATDELAY,          &Proxy::CMD_ChatDelay },
+	{ "demouploadpushurl", CMD_ID_DEMOUPLOADPUSHURL,  &Proxy::CMD_DemoUploadPushUrl },
 };
 
 EXPOSE_SINGLE_INTERFACE(Proxy, IProxy, PROXY_INTERFACE_VERSION);
@@ -153,9 +154,16 @@ bool Proxy::Init(IBaseSystem *system, int serial, char *name)
 
 	m_World->RegisterListener(this);
 
+	if (!m_System->AddModule(&m_DemoUpload, "demoupload"))
+	{
+		m_System->Printf("Proxy::Init: Couldn't create demo upload.\n");
+	}
+
 	if (!m_System->AddModule(&m_DemoClient, "demo")) {
 		m_System->Printf("Proxy::Init: Couldn't create demo client.\n");
 	}
+
+	m_DemoClient.SetDemoUpload(&m_DemoUpload);
 
 	m_DemoClient.SetProxy(this);
 	m_DemoClient.SetWorld(m_World);
@@ -346,6 +354,7 @@ void Proxy::ShutDown()
 	m_Master.ShutDown();
 	m_Status.ShutDown();
 	m_DemoClient.ShutDown();
+	m_DemoUpload.ShutDown();
 
 	// Director module shutdown
 	if (m_Director) {
@@ -2795,6 +2804,23 @@ void Proxy::CMD_ChatDelay(char *cmdLine)
 
 	SetChatDelay(Q_atoi(params.GetToken(param_ChatDelay)));
 }
+
+void Proxy::CMD_DemoUploadPushUrl(char *cmdLine) {
+	TokenLine params(cmdLine);
+	if (params.CountToken() != 2)
+	{
+		m_System->Printf("Syntax: demouploadpushurl <url>\n");
+
+		auto currentPushUrl = m_DemoUpload.GetPushUrl();
+		if (currentPushUrl[0])
+			m_System->Printf("Current push URL is %s.\n", currentPushUrl);
+
+		return;
+	}
+
+	m_DemoUpload.SetPushUrl(params.GetToken(1));
+}
+
 
 void Proxy::SetChatDelay(int delay)
 {

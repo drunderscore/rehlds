@@ -82,6 +82,7 @@ set(PROXY_SRCS
 	"src/ProxyClient.cpp"
 	"src/DemoClient.cpp"
 	"src/FakeClient.cpp"
+	"src/DemoUpload.cpp"
 	"src/public_amalgamation.cpp"
 	"../Director/src/Director.cpp"
 )
@@ -137,6 +138,7 @@ target_link_libraries(proxy PRIVATE
 	m
 	bzip2
 	steam_api
+    curl
 )
 
 if (NOT TARGET bzip2)

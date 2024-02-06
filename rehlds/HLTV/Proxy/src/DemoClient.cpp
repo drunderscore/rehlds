@@ -272,10 +272,33 @@ void DemoClient::FinishDemo()
 
 	m_DemoFile.WriteDemoMessage(&m_DemoChannel.m_unreliableStream, &m_DemoChannel.m_reliableStream);
 	m_DemoFile.CloseFile();
+
 	m_DemoChannel.Clear();
 
 	m_LastFrameSeqNr = 0;
 	m_ClientDelta = 0;
+
+	UploadDemo();
+}
+
+void DemoClient::UploadDemo()
+{
+	if (!m_DemoUpload)
+		return;
+
+	if (!m_DemoFile.GetFileName() || !m_DemoFile.GetFileName()[0])
+		return;
+
+	// Not using MAX_PATH here, because it's stupid.
+	char localPath[1024];
+
+	if (!m_System->GetFileSystem()->GetLocalPath(m_DemoFile.GetFileName(), localPath, sizeof(localPath)))
+	{
+		m_System->Printf("WARNING: Unable to find local path for demo name %s, not uploading\n", m_DemoFile.GetFileName());
+		return;
+	}
+
+	m_DemoUpload->Upload(localPath);
 }
 
 NetAddress *DemoClient::GetAddress()

@@ -29,6 +29,7 @@
 #pragma once
 
 #include "common/InfoString.h"
+#include "DemoUpload.h"
 
 class DemoClient: public IClient, public BaseSystemModule {
 public:
@@ -55,6 +56,7 @@ public:
 	bool HasChatEnabled();
 
 	void SetProxy(IProxy *proxy);
+	void SetDemoUpload(DemoUpload *demoUpload) { m_DemoUpload = demoUpload; }
 	void SetFileName(char *fileName);
 	DemoFile *GetDemoFile();
 	void FinishDemo();
@@ -62,12 +64,14 @@ public:
 	void WriteDatagram(double time, frame_t *frame);
 	void SetUpdateRate(int updaterate);
 	void SetRate(int rate);
+	void UploadDemo();
 
 protected:
 	IProxy *m_Proxy;
 	IWorld *m_World;
 	bool m_IsActive;
 	NetChannel m_DemoChannel;
+	DemoUpload* m_DemoUpload{};
 
 	enum { MAX_DEMO_INFO = 256 };
 	DemoFile m_DemoFile;

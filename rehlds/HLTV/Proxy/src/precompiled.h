@@ -40,6 +40,7 @@
 #include "ProxyClient.h"
 #include "DemoClient.h"
 #include "FakeClient.h"
+#include "DemoUpload.h"
 
 #include "Master.h"
 #include "Status.h"

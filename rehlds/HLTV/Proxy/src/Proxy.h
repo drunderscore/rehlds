@@ -232,7 +232,8 @@ private:
 		CMD_ID_MAXLOSS,
 		CMD_ID_PROTOCOL,
 		CMD_ID_REGION,
-		CMD_ID_CHATDELAY
+		CMD_ID_CHATDELAY,
+		CMD_ID_DEMOUPLOADPUSHURL
 	};
 
 	void CMD_Rcon(char *cmdLine);
@@ -288,6 +289,7 @@ private:
 	void CMD_Protocol(char *cmdLine);
 	void CMD_Region(char *cmdLine);
 	void CMD_ChatDelay(char *cmdLine);
+	void CMD_DemoUploadPushUrl(char *cmdLine);
 
 	struct LocalCommandID_s {
 		char *name;
@@ -315,6 +317,7 @@ protected:
 	Director m_DefaultDirector;
 	DirectorNull m_NullDirector;
 	INetSocket *m_Socket;
+	DemoUpload m_DemoUpload;
 
 	typedef struct challenge_s {
 		NetAddress adr;

@@ -109,20 +109,11 @@ void *DemoUpload::UploadThread(void *args)
 		curl_mime_name(part, "payload_json");
 		curl_mime_data(part, "{\"content\":\"here is your demo bitch!\"}", CURL_ZERO_TERMINATED);
 		curl_easy_setopt(curl, CURLOPT_MIMEPOST, mime);
-		printf("about to perform!\n");
 		curl_result_code = curl_easy_perform(curl);
-		if (curl_result_code != CURLE_OK)
-			printf("cURL failed: %d\n", curl_result_code);
 
-		printf("we've performed, result is %d.\n", curl_result_code);
 		curl_mime_free(mime);
 
 		curl_easy_cleanup(curl);
-		printf("and i even cleaned up afterwards!\n");
-	}
-	else
-	{
-		printf("curl shit the bed\n");
 	}
 
 	Mem_Free(uploadThreadArguments->demoFilePath);

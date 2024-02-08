@@ -107,7 +107,7 @@ void *DemoUpload::UploadThread(void *args)
 		curl_mime_filedata(part, uploadThreadArguments->demoFilePath);
 		part = curl_mime_addpart(mime);
 		curl_mime_name(part, "payload_json");
-		curl_mime_data(part, "{\"content\":\"here is your demo bitch!\"}", CURL_ZERO_TERMINATED);
+		curl_mime_data(part, "{\"content\":\"A demo has been recorded.\"}", CURL_ZERO_TERMINATED);
 		curl_easy_setopt(curl, CURLOPT_MIMEPOST, mime);
 		curl_result_code = curl_easy_perform(curl);
 
